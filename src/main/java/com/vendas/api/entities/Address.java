@@ -2,15 +2,14 @@ package com.vendas.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity
 @Table (name = "tb_address")
 public class Address {
 
@@ -33,15 +32,5 @@ public class Address {
     @JsonIgnore
     private User user;
 
-    public Address(String rua, String numero, String bairro, String cidade, String estado, String cep, Double longitude, Double latitude, User user) {
-        this.rua = rua;
-        this.numero = numero;
-        this.bairro = bairro;
-        this.cidade = cidade;
-        this.estado = estado;
-        this.cep = cep;
-        this.longitude = longitude;
-        this.latitude = latitude;
-        this.user = user;
-    }
 }
+

@@ -3,10 +3,7 @@ package com.vendas.api.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,14 +18,14 @@ import java.util.List;
         "addresses"
 })
 
-@Entity
-@Table(name = "tb_user")
+
 @Getter
 @Setter
 @NoArgsConstructor
-
-
-
+@AllArgsConstructor
+@Builder
+@Entity
+@Table(name = "tb_user")
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +37,7 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
+            orphanRemoval = true)
     @JsonIgnore
     private List<Address> addresses = new ArrayList<>();
 }
