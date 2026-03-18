@@ -8,7 +8,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity
 @Table (name = "tb_address")
 public class Address {
@@ -31,6 +30,7 @@ public class Address {
     @JoinColumn(name = "usuario_id")
     @JsonIgnore
     private User user;
+
 
 }
 

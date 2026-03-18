@@ -4,26 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import lombok.*;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonPropertyOrder({
-        "id",
-        "name",
-        "email",
-        "phone",
-        "password",
-        "addresses"
-})
-
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity
 @Table(name = "tb_user")
 public class User implements Serializable {
@@ -38,6 +28,6 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    @JsonIgnore
+
     private List<Address> addresses = new ArrayList<>();
 }

@@ -1,33 +1,37 @@
 package com.vendas.api.services;
 
-import com.vendas.api.entities.Address;
+import com.vendas.api.controllers.request.UserRequest;
+import com.vendas.api.controllers.response.UserResponse;
 import com.vendas.api.entities.User;
+import com.vendas.api.mapper.UserMapper;
 import com.vendas.api.repositories.UserRepository;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 
 @Service
-@RequiredArgsConstructor
+
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public User createUser(User user){
-
-        if (user.getAddresses() != null){
-
-            for(Address address : user.getAddresses()){
-                address.setUser(user);
-
-            }
-        }
-        return userRepository.save(user);
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
-    public List<User> findAll(){
+    public UserResponse createUser(UserRequest request) {
+        User user = userMapper.toUser(request);
+        userRepository.save(user);
+        return userMapper.toResponse(user);
+
+
+    }
+
+    public List<User> findAll() {
 
         return userRepository.findAll();
     }
