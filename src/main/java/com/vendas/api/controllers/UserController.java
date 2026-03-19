@@ -2,10 +2,8 @@ package com.vendas.api.controllers;
 
 import com.vendas.api.controllers.request.UserRequest;
 import com.vendas.api.controllers.response.UserResponse;
-import com.vendas.api.entities.User;
 import com.vendas.api.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/vendas/users")
 public class UserController {
 
     private final UserService userService;
@@ -26,10 +24,25 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
     }
 
-    @GetMapping
-    public List<User> findAllUser(){
+    @GetMapping(value = "/all")
+    public ResponseEntity<List<UserResponse>> findAllUser(){
+        List<UserResponse> allUsers = userService.findAll();
 
-        return userService.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(allUsers);
+
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponse> findUserById(@PathVariable Long id){
+        UserResponse userResponse = userService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(userResponse);
+
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable Long id){
+        userService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
     }
 

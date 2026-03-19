@@ -28,7 +28,7 @@ public class Address {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
-    @JsonIgnore
+
     private User user;
 
 

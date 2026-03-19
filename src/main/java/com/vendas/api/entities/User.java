@@ -1,10 +1,8 @@
 package com.vendas.api.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import lombok.*;
-import org.antlr.v4.runtime.misc.NotNull;
+
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,8 +17,9 @@ import java.util.List;
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String name;
+    @Column(unique = true, nullable = false)
     private String email;
     private String phone;
     private String password;

@@ -35,7 +35,7 @@ public class AddressMapper {
                 .rua(address.getRua())
                 .numero(address.getNumero())
                 .bairro(address.getBairro())
-                .cidade(address.getBairro())
+                .cidade(address.getCidade())
                 .estado(address.getEstado())
                 .cep(address.getCep())
                 .build();

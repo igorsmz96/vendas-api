@@ -38,8 +38,8 @@ public class UserMapper {
 
                 user.getAddresses().add(address);
             }
-        }
 
+        }
 
         return user;
 
@@ -52,6 +52,7 @@ public class UserMapper {
                 .toList();
 
         return UserResponse.builder()
+                .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
                 .phone(user.getPhone())
