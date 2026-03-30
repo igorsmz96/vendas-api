@@ -1,8 +1,11 @@
 package com.vendas.api.services;
 
+import com.vendas.api.controllers.request.AddressRequest;
 import com.vendas.api.controllers.request.UserRequest;
 import com.vendas.api.controllers.response.UserResponse;
+import com.vendas.api.entities.Address;
 import com.vendas.api.entities.User;
+import com.vendas.api.mapper.AddressMapper;
 import com.vendas.api.mapper.UserMapper;
 import com.vendas.api.repositories.UserRepository;
 
@@ -20,10 +23,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final AddressMapper addressMapper;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, AddressMapper addressMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.addressMapper = addressMapper;
     }
 
     public UserResponse createUser(UserRequest request) {
@@ -59,6 +64,68 @@ public class UserService {
         else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario com o id: " +id+ "nao encontrado");
         }
+
+    }
+
+    public UserResponse updateUser(Long id, UserRequest request) {
+        Optional<User> op = userRepository.findById(id);
+
+        if (op.isPresent()) {
+            User user = op.get();
+
+            user.setName(request.name());
+            user.setEmail(request.email());
+            user.setPhone(request.phone());
+            user.setPassword(request.password());
+
+            user.getAddresses().clear();
+
+            if (request.addresses() != null) {
+
+                for (AddressRequest addressRequest : request.addresses()) {
+
+                    Address address = addressMapper.toAddress(addressRequest);
+                    address.setUser(user);
+                    user.getAddresses().add(address);
+
+                }
+            }
+
+            userRepository.save(user);
+            return userMapper.toResponse(user);
+
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario com o id: " + id + "nao encontrado");
+
+
+        }
+
+    }
+
+    public UserResponse updatePartial(Long id, UserRequest request) {
+        Optional<User> op = userRepository.findById(id);
+
+        if (op.isPresent()) {
+            User user = op.get();
+
+            Optional.ofNullable(request.name()).ifPresent(name -> user.setName(name));
+            Optional.ofNullable(request.email()).ifPresent(email -> user.setEmail(email));
+            Optional.ofNullable(request.phone()).ifPresent(phone -> user.setPhone(phone));
+            Optional.ofNullable(request.password()).ifPresent(password -> user.setPassword(password));
+
+            if (request.addresses() != null) {
+                for (AddressRequest addressRequest : request.addresses()) {
+                    Address address = addressMapper.toAddress(addressRequest);
+                    address.setUser(user);
+                    user.getAddresses().add(address);
+                }
+            }
+            userRepository.save(user);
+            return userMapper.toResponse(user);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario com o id: " + id + "nao encontrado");
+        }
+
 
     }
 

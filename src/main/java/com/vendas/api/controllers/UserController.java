@@ -20,14 +20,12 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest request){
         UserResponse userResponse = userService.createUser(request);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
     }
 
     @GetMapping(value = "/all")
     public ResponseEntity<List<UserResponse>> findAllUser(){
         List<UserResponse> allUsers = userService.findAll();
-
         return ResponseEntity.status(HttpStatus.OK).body(allUsers);
 
     }
@@ -44,6 +42,19 @@ public class UserController {
         userService.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserRequest request){
+        UserResponse userResponse = userService.updateUser(id, request);
+        return ResponseEntity.status(HttpStatus.OK).body(userResponse);
+
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserResponse> updatePartial(@PathVariable Long id, @RequestBody UserRequest request){
+      UserResponse userResponse = userService.updatePartial(id,request);
+      return ResponseEntity.status(HttpStatus.OK).body(userResponse);
     }
 
 }
