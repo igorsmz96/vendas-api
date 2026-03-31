@@ -40,6 +40,9 @@ public class AddressService{
 
     public List<AddressResponse> findByUserId(Long userId){
 
+        userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "O id:" + userId + "nao foi encontrado"));
+
         List<Address> addresses = addressRepository.findByUserId(userId);
 
         List<AddressResponse> list = addresses.stream().map(address -> addressMapper.toResponse(address)).toList();
@@ -48,10 +51,12 @@ public class AddressService{
 
     }
 
-    public List<AddressResponse> findAll( ){
-        List<Address> addresses = addressRepository.findAll();
 
-        return addresses.stream().map(address -> addressMapper.toResponse(address)).toList();
+    public void deleteAddress(Long id){
+       Address address =  addressRepository.findById(id)
+               .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "O id:" + id + "nao foi encontrado"));
+       addressRepository.delete(address);
+
     }
 
 

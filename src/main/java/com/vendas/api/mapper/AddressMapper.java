@@ -3,11 +3,9 @@ package com.vendas.api.mapper;
 import com.vendas.api.controllers.request.AddressRequest;
 import com.vendas.api.controllers.response.AddressResponse;
 import com.vendas.api.entities.Address;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class AddressMapper {
 
     public Address toAddress (AddressRequest request){
@@ -32,6 +30,7 @@ public class AddressMapper {
         if (address == null) return null;
 
         return AddressResponse.builder()
+                .id(address.getId())
                 .userId(address.getUser().getId())
                 .rua(address.getRua())
                 .numero(address.getNumero())

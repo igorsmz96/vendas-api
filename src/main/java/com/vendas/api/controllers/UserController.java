@@ -12,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/vendas/users")
+@RequestMapping(value = "/users")
 public class UserController {
 
     private final UserService userService;
@@ -23,7 +23,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
     }
 
-    @GetMapping(value = "/all")
+    @GetMapping
     public ResponseEntity<List<UserResponse>> findAllUser(){
         List<UserResponse> allUsers = userService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(allUsers);

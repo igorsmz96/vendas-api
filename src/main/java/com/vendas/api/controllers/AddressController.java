@@ -13,7 +13,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/vendas/address")
+@RequestMapping(value = "/addresses")
 public class AddressController {
 
 
@@ -26,17 +26,18 @@ public class AddressController {
         return ResponseEntity.status(HttpStatus.CREATED).body(addressResponse);
     }
 
-    @GetMapping("/users/{userId}")
-    public ResponseEntity<List<AddressResponse>> findAddressByUserId(@PathVariable Long userId){
-        List<AddressResponse> byUserId = addressService.findByUserId(userId);
+    @GetMapping("/users/{id}")
+    public ResponseEntity<List<AddressResponse>> findAddressByUserId(@PathVariable Long id){
+        List<AddressResponse> byUserId = addressService.findByUserId(id);
         return ResponseEntity.status(HttpStatus.OK).body(byUserId);
 
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<AddressResponse>> findAll(){
-        List<AddressResponse> list = addressService.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(list);
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAddress(@PathVariable Long id){
+        addressService.deleteAddress(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
     }
 
