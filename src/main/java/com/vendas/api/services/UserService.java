@@ -9,6 +9,7 @@ import com.vendas.api.mapper.AddressMapper;
 import com.vendas.api.mapper.UserMapper;
 import com.vendas.api.repositories.UserRepository;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,18 +19,14 @@ import java.util.Optional;
 
 
 @Service
-
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final AddressMapper addressMapper;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, AddressMapper addressMapper) {
-        this.userRepository = userRepository;
-        this.userMapper = userMapper;
-        this.addressMapper = addressMapper;
-    }
+
 
     public UserResponse createUser(UserRequest request) {
         User user = userMapper.toUser(request);
@@ -46,32 +43,27 @@ public class UserService {
     }
 
     public UserResponse findById(Long id){
-        Optional <User> op = userRepository.findById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario com o id: " +id+ "nao encontrado"));
 
-        if(op.isPresent()){
-            return userMapper.toResponse(op.get());
-        }else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario com o id: " +id+ "nao encontrado");
-        }
+
+            return userMapper.toResponse(user);
+
     }
 
     public void deleteById(Long id){
-        Optional <User> op = userRepository.findById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario com o id: " +id+ "nao encontrado"));
 
-        if (op.isPresent()) {
             userRepository.deleteById(id);
-        }
-        else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario com o id: " +id+ "nao encontrado");
-        }
 
     }
 
     public UserResponse updateUser(Long id, UserRequest request) {
-        Optional<User> op = userRepository.findById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario com o id: " +id+ "nao encontrado"));
 
-        if (op.isPresent()) {
-            User user = op.get();
+
 
             user.setName(request.name());
             user.setEmail(request.email());
@@ -94,19 +86,15 @@ public class UserService {
             userRepository.save(user);
             return userMapper.toResponse(user);
 
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario com o id: " + id + "nao encontrado");
 
-
-        }
 
     }
 
     public UserResponse updatePartial(Long id, UserRequest request) {
-        Optional<User> op = userRepository.findById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario com o id: " +id+ "nao encontrado"));
 
-        if (op.isPresent()) {
-            User user = op.get();
+
 
             Optional.ofNullable(request.name()).ifPresent(name -> user.setName(name));
             Optional.ofNullable(request.email()).ifPresent(email -> user.setEmail(email));
@@ -122,9 +110,7 @@ public class UserService {
             }
             userRepository.save(user);
             return userMapper.toResponse(user);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario com o id: " + id + "nao encontrado");
-        }
+
 
 
     }

@@ -32,6 +32,7 @@ public class AddressMapper {
         if (address == null) return null;
 
         return AddressResponse.builder()
+                .userId(address.getUser().getId())
                 .rua(address.getRua())
                 .numero(address.getNumero())
                 .bairro(address.getBairro())
